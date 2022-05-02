@@ -10,6 +10,7 @@ public class SimpleShoot : MonoBehaviour
     public GameObject casingPrefab;
     public GameObject muzzleFlashPrefab;
     public GameObject bulletHolePrefab;
+    public Transform HandsTransform;
     [SerializeField] AudioClip gunShotSound;
     AudioSource audioSource;
 
@@ -47,6 +48,8 @@ public class SimpleShoot : MonoBehaviour
     //This function creates the bullet behavior
     void Shoot()
     {
+
+        
         //audioSource.PlayOneShot(gunShotSound);
         AudioSource audio = GetComponent<AudioSource>();
         audio.Play();        
@@ -81,6 +84,7 @@ public class SimpleShoot : MonoBehaviour
             Debug.Log("shoot at "+ hitPoint.point);
         }
 
+        HandsTransform.transform.localRotation *= Quaternion.Euler(-50, 0, 0);
     }
 
     //This function creates a casing at the ejection slot
