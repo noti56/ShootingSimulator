@@ -84,7 +84,7 @@ public class SimpleShoot : MonoBehaviour
             Debug.Log("shoot at "+ hitPoint.point);
         }
 
-        HandsTransform.transform.localRotation *= Quaternion.Euler(-50, 0, 0);
+        //HandsTransform.transform.localRotation *= Quaternion.Euler(-50, 0, 0);
     }
 
     //This function creates a casing at the ejection slot
