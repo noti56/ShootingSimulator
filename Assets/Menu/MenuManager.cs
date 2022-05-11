@@ -13,16 +13,28 @@ public class MenuManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
     }
 
-    public void HandleSceneChange(string sceneName) {
+    public static void  HandleSceneChange(string sceneName) {
+        Debug.Log(sceneName+ " sceneName");
+            Cursor.lockState = CursorLockMode.Locked;
+        if (!sceneName.Equals( "Menu"))
+        {
+            Debug.Log(sceneName + " wtf");
+        }
         SceneManager.LoadScene(sceneName);
+  
     }
 
     private void Update()
     {
         if (Input.GetButtonDown("Cancel")) {
             Debug.Log("Pause");
-            HandleSceneChange("Menu");
+            goToPause();
         }
         
+    }
+
+    public static void goToPause()
+    {
+        HandleSceneChange("Menu");
     }
 }

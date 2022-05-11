@@ -19,6 +19,7 @@ public class PlayerContoller : MonoBehaviour
     public GameObject rightHand;
     public bool isHoldingRight = false;
     public bool isJumping = false;
+    public bool isActive = true;
     
     public Rigidbody rb;
 
@@ -38,6 +39,7 @@ public class PlayerContoller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isActive) return;
         getInput();
 
     }
