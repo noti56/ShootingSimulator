@@ -7,6 +7,8 @@ TagManager:
   - floor
   - gun
   - gameManager
+  - enemy
+  - bullet
   layers:
   - Default
   - TransparentFX

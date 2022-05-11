@@ -7,6 +7,8 @@ public class PlayerContoller : MonoBehaviour
     // Start is called before the first frame update
     public float playerSpeed = 10;
     [SerializeField] int time = 2;
+    [SerializeField] float playerHeight = 2 ;
+    [SerializeField] float crouchHeight = 1;
     [SerializeField] Animator anim;
     public float jumpPower = 10;
     public Transform camera;
@@ -17,7 +19,17 @@ public class PlayerContoller : MonoBehaviour
     public GameObject rightHand;
     public bool isHoldingRight = false;
     public bool isJumping = false;
+    
     public Rigidbody rb;
+
+
+
+    public delegate void OnDeath();
+    public static OnDeath OnDeathEvent;
+    public delegate void OnMovement(Transform playerTransform);
+    public static OnMovement OnPlayerMovementEvent;
+
+
     void Start()
     {
   
@@ -53,17 +65,37 @@ public class PlayerContoller : MonoBehaviour
         camera.transform.Rotate( mouseHorizontal, mouseVertical , 0);*/
         transform.Translate(normlaizeMovement(horizontal), 0, normlaizeMovement(vertical));
 
+        OnPlayerMovementEvent?.Invoke(gameObject.transform);
+
         if (Input.GetButtonDown("Jump") && !isJumping) {
             //transform.Translate(0,jumpPower, 0);
             rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
             isJumping = true;
+            OnPlayerMovementEvent?.Invoke(gameObject.transform);
+        }
+        if (Input.GetButtonDown("Crouch") ) {
 
+            handleCrouch(crouchHeight);
+            
+        }
+        if (Input.GetButtonUp("Crouch"))
+        {
+
+            handleCrouch(playerHeight);
         }
 
 
     }
 
    
+    private void handleCrouch(float height)
+    {
+        Debug.Log("handleCrouch");
+        GetComponent<CapsuleCollider>().height = height;
+            OnPlayerMovementEvent?.Invoke(gameObject.transform);
+
+    }
+
     private void retrieveGun()
     {
         if (!leftHand || !rightHand || !gun) return;
@@ -77,8 +109,20 @@ public class PlayerContoller : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag == "floor") {
+            if(isJumping)
+            {
+                OnPlayerMovementEvent?.Invoke(gameObject.transform);
+            }
             isJumping = false;
         }
+   
+            
+            if (collision.gameObject.tag == "bullet")
+            {
+                Debug.Log("bullet hit player");
+            OnDeathEvent?.Invoke();
+            
+            }
         
     }
 

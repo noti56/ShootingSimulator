@@ -24,6 +24,9 @@ public class SimpleShoot : MonoBehaviour
     [Tooltip("Bullet Speed")] [SerializeField] private float shotPower = 500f;
     [Tooltip("Casing Ejection Speed")] [SerializeField] private float ejectPower = 150f;
 
+    public  delegate void  OnShootOnEnemy(GameObject enemy);
+    public static OnShootOnEnemy onShootOnEnemyEvent;
+   
 
     void Start()
     {
@@ -76,7 +79,11 @@ public class SimpleShoot : MonoBehaviour
         RaycastHit hitPoint;
         if (Physics.Raycast(barrelLocation.position, barrelLocation.forward, out hitPoint)) {
             if (!bulletHolePrefab) { return; }
-            Debug.Log(hitPoint.transform.position.ToString());
+            Debug.Log(hitPoint.transform.tag + "shhootott");
+
+            if (hitPoint.transform.tag == "enemy") {
+                onShootOnEnemyEvent?.Invoke(hitPoint.transform.gameObject);
+            }
             GameObject bulletHoleGameObject;
             bulletHoleGameObject = Instantiate(bulletHolePrefab, hitPoint.point, Quaternion.LookRotation(hitPoint.normal));
             bulletHoleGameObject.transform.Rotate(Vector3.right * 180);
@@ -105,5 +112,7 @@ public class SimpleShoot : MonoBehaviour
         //Destroy casing after X seconds
         Destroy(tempCasing, destroyTimer);
     }
+
+    
 
 }
